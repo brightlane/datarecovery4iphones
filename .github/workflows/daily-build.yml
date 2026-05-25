@@ -3,39 +3,101 @@ name: Daily Build
 on:
   schedule:
     - cron: "0 9 * * *"
+
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: unbounce-daily-build
+  cancel-in-progress: false
 
 jobs:
   build-and-commit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          persist-credentials: true
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Build site
+      - name: Configure Git
         run: |
-          python build.py
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit changes
+      - name: Sync Latest Remote
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+
+      - name: Verify Repository Files
+        run: |
+          ls -la
+
+      - name: Build Site
+        run: |
+          if [ -f build.py ]; then
+            python build.py
+          else
+            echo "build.py missing"
+            exit 1
+          fi
+
+      - name: Verify Docs Output
+        run: |
+          echo "DOCS DIRECTORY:"
+          ls -R docs || echo "docs folder missing"
+
+      - name: Commit Changes
+        shell: bash
+        run: |
           git add docs
+
           if git diff --cached --quiet; then
             echo "No changes to commit"
-          else
-            git commit -m "chore: daily site rebuild"
-            git push
+            exit 0
           fi
+
+          git commit -m "chore: daily site rebuild"
+
+      - name: Safe Push Retry Loop
+        shell: bash
+        run: |
+          for i in 1 2 3 4 5; do
+            echo "Push attempt $i"
+
+            git fetch origin main
+
+            git rebase origin/main || {
+              echo "Rebase failed"
+              git rebase --abort || true
+              sleep 3
+              continue
+            }
+
+            if git push origin main; then
+              echo "Push successful"
+              exit 0
+            fi
+
+            echo "Push rejected. Retrying..."
+            sleep 5
+          done
+
+          echo "Failed to push after multiple attempts"
+          exit 1
+
+      - name: Workflow Complete
+        run: |
+          echo "Daily Build workflow completed successfully"
