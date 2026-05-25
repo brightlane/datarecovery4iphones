@@ -1,0 +1,28 @@
+# Crossout
+
+> Crossout is a landing-page affiliate site focused on Unbounce reviews, pricing, comparisons, conversion-rate optimization, and daily blog content for marketers and agencies.
+
+This site is built to help visitors find the best Unbounce content quickly. The most important pages are listed below.
+
+## Core pages
+
+- [Home](https://brightlane.github.io/crossout/)
+- [Unbounce Review](https://brightlane.github.io/crossout/unbounce-review/)
+- [Unbounce Pricing](https://brightlane.github.io/crossout/unbounce-pricing/)
+- [Unbounce Features](https://brightlane.github.io/crossout/unbounce-features/)
+- [Unbounce vs Leadpages](https://brightlane.github.io/crossout/unbounce-vs-leadpages/)
+- [Unbounce vs ClickFunnels](https://brightlane.github.io/crossout/unbounce-vs-clickfunnels/)
+- [Best Landing Page Builder](https://brightlane.github.io/crossout/best-landing-page-builder/)
+- [Landing Page CRO Guide](https://brightlane.github.io/crossout/landing-page-cro/)
+- [Agency Playbook](https://brightlane.github.io/crossout/agency-playbook/)
+- [Start Here](https://brightlane.github.io/crossout/start-here/)
+
+## Blog
+
+- [Blog Index](https://brightlane.github.io/crossout/blog/)
+
+## Notes
+
+- Primary topic: Unbounce landing pages and conversion optimization.
+- Primary conversion goal: affiliate trial clicks and signups.
+- The site also generates daily blog posts and keeps the sitemap current.
