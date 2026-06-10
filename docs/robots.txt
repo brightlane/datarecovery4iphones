@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://brightlane.github.io/crossout/sitemap.xml
